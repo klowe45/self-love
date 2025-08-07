@@ -1,0 +1,21 @@
+.about {
+  width: 100%;
+  padding: 20px 100px 0 100px;
+  position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.about__content {
+  display: block;
+  position: relative;
+}
+
+.about__info {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 30px 0;
+  font-size: 16px;
+  color: #000000;
+}

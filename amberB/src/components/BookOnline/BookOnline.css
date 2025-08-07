@@ -1,0 +1,64 @@
+.bookonline {
+  width: 1240px;
+  padding-top: 170px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.bookonline__title {
+  margin: 50px auto 0 auto;
+}
+
+.bookonline__container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 30px auto 30px auto;
+}
+
+.bookonline__product {
+  display: flex;
+  padding: 5px;
+  width: 600px;
+  flex-wrap: wrap;
+  height: 300px;
+  border: 1px solid;
+  border-radius: 20px;
+  box-shadow: 10px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
+}
+
+.bookonline__product-img {
+  width: 300px;
+  height: 300px;
+  margin: 0;
+}
+
+.bookonline__product-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bookonline__product-title {
+  max-height: 100px;
+  max-width: 270px;
+  text-align: center;
+}
+
+.bookonline__product-text {
+  font-size: 18px;
+  margin: 0 auto 15px auto;
+}
+
+.bookonline__product-price {
+  margin-bottom: 20px;
+}
+
+.bookonline__product-btn {
+  border: 2px solid;
+  min-width: 100px;
+  color: #000000;
+  background-color: transparent;
+  cursor: pointer;
+}
