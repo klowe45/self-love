@@ -3,7 +3,10 @@ import "./Header.css";
 import avatar from "../../assets/amber_avatar.jpg";
 import Navigation from "../Navigation/Navigation";
 
-function Header(openDropDownMenu) {
+function Header({ openDropDownMenu, isLoggedIn, handleSignInModal }) {
+  const handleOnSignInClick = () => {
+    handleSignInModal();
+  };
   return (
     <header className="header">
       <div className="header__owner">
@@ -12,7 +15,13 @@ function Header(openDropDownMenu) {
           Ms. Amber Broihier, M.Ed. BBA Self Love Empowerment Teacher
         </h2>
         <button className="header__cart"></button>
-        <button className="header__logout">Log In</button>
+        {!isLoggedIn ? (
+          <button className="header__signin" onClick={handleOnSignInClick}>
+            Sign In
+          </button>
+        ) : (
+          <button className="header__logout">Log Out</button>
+        )}
       </div>
 
       <div className="header__navi-container">

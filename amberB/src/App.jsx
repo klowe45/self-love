@@ -4,30 +4,57 @@ import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
 import Workshop from "./components/Workshop/Workshop";
-import { useState } from "react";
+import { act, useState } from "react";
 import Contact from "./components/Contact/Contact";
 import BookOnline from "./components/BookOnline/BookOnline";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import SignUpModal from "./components/SignUpModal/SignUpModal";
+import SignInModal from "./components/SignInModal/SignInModal";
 function App() {
+  /*****************************************************************/
+  /*                             Modal                             */
+  /*****************************************************************/
+
   const [activeModal, setActiveModal] = useState("");
-  const closeModal = () => setActiveModal("");
+  const [isSigninModalOpen, setIsSignInModalOpen] = useState(false);
+
+  const closeModal = () => {
+    setActiveModal("");
+  };
+
+  const handleSignUpModal = () => {
+    setActiveModal("signup");
+  };
+
+  const handleSignInModal = () => {
+    setActiveModal("signin");
+  };
 
   /*****************************************************************/
-  /*                          Array of Img                         */
+  /*                              USER                             */
   /*****************************************************************/
 
-  /*****************************************************************/
-  /*                          Array of Img                         */
-  /*****************************************************************/
+  const [currentUser, setCurrentUser] = useState({
+    email: "",
+    password: "",
+    username: "",
+  });
 
-  /*****************************************************************/
-  /*                          Array of Img                         */
-  /*****************************************************************/
+  const userContext = {
+    email: "",
+    password: "",
+    username: "",
+  };
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <div className="page">
       <div className="page__content">
-        <Header activeModal={activeModal} closeModal={closeModal} />
+        <Header
+          activeModal={activeModal}
+          handleSignInModal={handleSignInModal}
+        />
 
         <Routes>
           <Route
@@ -45,6 +72,8 @@ function App() {
         <Contact />
         <Footer />
       </div>
+      <SignUpModal closeModal={closeModal} activeModal={activeModal} />
+      <SignInModal closeModal={closeModal} activeModal={activeModal} />
     </div>
   );
 }

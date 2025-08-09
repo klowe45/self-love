@@ -2,7 +2,7 @@
   width: 100%;
   padding: 10px 100px 0 100px;
   position: fixed;
-  z-index: 10000;
+  z-index: 999;
   background-color: rgba(999, 999, 999, 1);
 }
 
@@ -41,6 +41,18 @@
   width: 40px;
   height: 40px;
   padding: 0;
+}
+
+.header__signin {
+  padding: 0;
+  margin: 10px;
+  width: 122px;
+  height: 20px;
+  background-color: transparent;
+  color: #000000;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .header__logout {
