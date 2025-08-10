@@ -10,6 +10,7 @@ import BookOnline from "./components/BookOnline/BookOnline";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 import SignUpModal from "./components/SignUpModal/SignUpModal";
 import SignInModal from "./components/SignInModal/SignInModal";
+import * as auth from "../src/components/utils/auth";
 function App() {
   /*****************************************************************/
   /*                             Modal                             */
@@ -48,6 +49,30 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  /*****************************************************************/
+  /*                           Sign Up                             */
+  /*****************************************************************/
+
+  const handleSignUpSubmit = ({
+    firstName,
+    lastName,
+    email,
+    password,
+    phoneNumber,
+    mailingAddress,
+  }) => {
+    console.log("Submit button working", {
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNumber,
+      mailingAddress,
+    });
+
+    auth.signUp(firstName, lastName, password, phoneNumber, mailingAddress);
+  };
+
   return (
     <div className="page">
       <div className="page__content">
@@ -72,8 +97,16 @@ function App() {
         <Contact />
         <Footer />
       </div>
-      <SignUpModal closeModal={closeModal} activeModal={activeModal} />
-      <SignInModal closeModal={closeModal} activeModal={activeModal} />
+      <SignUpModal
+        closeModal={closeModal}
+        activeModal={activeModal}
+        handleSignInModal={handleSignInModal}
+      />
+      <SignInModal
+        closeModal={closeModal}
+        activeModal={activeModal}
+        handleSignUpModal={handleSignUpModal}
+      />
     </div>
   );
 }

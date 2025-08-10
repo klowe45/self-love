@@ -22,7 +22,6 @@
   position: relative;
   background-color: #ffffff;
   width: 400px;
-  height: 300px;
   padding: 10px;
   border-radius: 40px;
 }
@@ -59,14 +58,19 @@
 }
 
 .modal__title {
-  margin-bottom: 20px;
+  margin: 0;
+  display: flex;
+  justify-content: center;
 }
 
 .modal__label {
+  margin: 20px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .modal__input {
-  margin-left: 10px;
+  margin: 0 0 0 auto;
   background-color: transparent;
   border: 0;
   border-bottom: 1px solid;
@@ -80,6 +84,7 @@
   border: 1px solid #15b99d;
   padding: 5px;
   transition: 0.3 ease all;
+  margin: 15px auto 15px auto;
 }
 
 .modal__submit:hover {

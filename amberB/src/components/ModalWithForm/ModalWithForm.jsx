@@ -8,6 +8,7 @@ function ModalWithForm({
   buttonText,
   buttonText2,
   isOpen,
+  toggleButton,
 }) {
   return (
     <div className={`modal ${isOpen ? "modal_opened" : ""}`}>
@@ -23,7 +24,11 @@ function ModalWithForm({
           <button type="button" className="modal__submit">
             {buttonText}
           </button>
-          <button type="button" className="modal__submit">
+          <button
+            type="button"
+            className="modal__submit"
+            onClick={toggleButton}
+          >
             {buttonText2}
           </button>
         </form>
