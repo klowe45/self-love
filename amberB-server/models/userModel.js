@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchemas = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
@@ -23,10 +23,12 @@ const userSchemas = new mongoose.Schema(
       required: true,
       select: false,
     },
-    phoneNumber: { String, required: true },
-    mailingAddress: { String, required: true },
+    phoneNumber: { type: String, required: true },
+    mailingAddress: { type: String, required: true },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("users", userSchemas);
+userSchema.index({ email: 1 }, { unique: true });
+
+module.exports = mongoose.model("users", userSchema);

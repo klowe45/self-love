@@ -1,9 +1,23 @@
-import { React, useState, useEffect, act } from "react";
+import { React, useState, useEffect } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-function SignInModal({ activeModal, closeModal, handleSignUpModal }) {
+function SignInModal({
+  activeModal,
+  closeModal,
+  handleSignUpModal,
+  handleSignInSubmit,
+}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    handleSignInSubmit({
+      email,
+      password,
+    });
+  };
 
   return (
     <ModalWithForm
@@ -14,23 +28,24 @@ function SignInModal({ activeModal, closeModal, handleSignUpModal }) {
       buttonText={"Sign In"}
       buttonText2={"Sign Up"}
       toggleButton={handleSignUpModal}
+      onSubmit={onSubmit}
     >
-      <label htmlFor="username" className="modal__label">
+      <label htmlFor="name-signin" className="modal__label">
         Name:{""}
         <input
           type="text"
           className="modal__input"
-          id="name-signup"
+          id="name-signin"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         ></input>
       </label>
-      <label htmlFor="password" className="modal__label">
+      <label htmlFor="password-signin" className="modal__label">
         Password:{""}
         <input
           type="password"
-          id="password-signIn"
+          id="password-signin"
           className="modal__input"
           placeholder="Password"
           value={password}

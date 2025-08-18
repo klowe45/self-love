@@ -4,7 +4,7 @@ import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
 import Workshop from "./components/Workshop/Workshop";
-import { act, useState } from "react";
+import { useState } from "react";
 import Contact from "./components/Contact/Contact";
 import BookOnline from "./components/BookOnline/BookOnline";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
@@ -53,26 +53,44 @@ function App() {
   /*                           Sign Up                             */
   /*****************************************************************/
 
-  const handleSignUpSubmit = ({
-    firstName,
-    lastName,
-    email,
-    password,
-    phoneNumber,
-    mailingAddress,
-  }) => {
-    console.log("Submit button working", {
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-      mailingAddress,
-    });
+  const handleSignUpSubmit = async (payload) => {
+    const { firstName, lastName, password, phoneNumber, mailingAddress } =
+      payload;
 
-    auth.signUp(firstName, lastName, password, phoneNumber, mailingAddress);
+    try {
+      console.log("Submit Button Working", payload);
+
+      await auth.signUp({
+        firstName,
+        lastName,
+        password,
+        phoneNumber,
+        mailingAddress,
+      });
+      const data = await auth.signIn({ email, password });
+      console.log("Sign In Completed", data);
+    } catch (err) {
+      console.error("Failed to create user.", err);
+      throw new Error(err?.message || "Failed to create user.");
+    }
   };
 
+  /*****************************************************************/
+  /*                           Sign In                             */
+  /*****************************************************************/
+
+  const handleSignInSubmit = async () => {
+    try {
+      console.log({ email, password });
+      await auth.signIn({ email, password });
+      const data = await auth.signIn(email, password);
+
+      localStorage.setItem("token", data.token);
+      console.log("signed in comeplete", data);
+    } catch (err) {
+      console.error("sign in failed", err);
+    }
+  };
   return (
     <div className="page">
       <div className="page__content">
@@ -101,11 +119,13 @@ function App() {
         closeModal={closeModal}
         activeModal={activeModal}
         handleSignInModal={handleSignInModal}
+        handleSignUpSubmit={handleSignUpSubmit}
       />
       <SignInModal
         closeModal={closeModal}
         activeModal={activeModal}
         handleSignUpModal={handleSignUpModal}
+        handleSignInSubmit={handleSignInSubmit}
       />
     </div>
   );

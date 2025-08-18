@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongodb");
+const mongoose = require("mongoose");
 require("dotenv").config({ path: "./config.env" });
 const cors = require("cors");
 
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 //health check//
-app.get("/heath", (_req, res) => res.json({ ok: true }));
+app.get("/health", (_req, res) => res.json({ ok: true }));
 
 //error handler//
 function errorHandler(err, _req, res, _next) {
@@ -38,7 +38,7 @@ async function start() {
     console.log("✅ Connected to MongoDB via Mongoose");
 
     // Routes
-    app.use("/middleware/auth", authRoutes); // POST /signup, POST /signin
+    app.use("/auth", authRoutes); // POST /signup, POST /signin
     app.use("/", mainRouter); // keep your existing routes (optional)
 
     // Error handler must come after routes
