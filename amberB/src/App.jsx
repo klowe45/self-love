@@ -13,6 +13,8 @@ import SignUpModal from "./components/SignUpModal/SignUpModal";
 import SignInModal from "./components/SignInModal/SignInModal";
 import * as auth from "./components/utils/auth";
 import * as token from "./components/utils/Token";
+import AddServices from "./components/AddServices/AddServices";
+
 function App() {
   /*****************************************************************/
   /*                             Modal                             */
@@ -140,6 +142,7 @@ function App() {
           ></Route>
           <Route path="/workshop" element={<Workshop />} />
           <Route path="/bookonline" element={<BookOnline />} />
+          <Route path="/addservice" element={<AddServices />} />
           <Route path="*" element={<h1>Page Not Found</h1>} />
         </Routes>
         <Contact />

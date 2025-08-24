@@ -51,15 +51,26 @@ function Navigation({ closeModal, activeModal, isLoggedIn }) {
           />
         </li>
         {isLoggedIn && (
-          <li>
-            <Link
-              to={"/bookonline"}
-              className="header__nav-btn-link"
-              aria-label="Go to Book Online"
-            >
-              Book Online
-            </Link>
-          </li>
+          <>
+            <li>
+              <Link
+                to={"/bookonline"}
+                className="header__nav-btn-link"
+                aria-label="Go to Book Online"
+              >
+                Book Online
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="header__nav-btn-link"
+                to={"/addservice"}
+                aria-label="Adding serivces"
+              >
+                Add Service
+              </Link>
+            </li>
+          </>
         )}
         <li>
           <button
