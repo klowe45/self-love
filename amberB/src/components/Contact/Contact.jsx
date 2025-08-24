@@ -1,6 +1,6 @@
 import "./Contact.css";
 import React from "react";
-import instagramLogo from "../../assets/IG-icon.png";
+import phoneImg from "../../assets/phone-icon.png";
 
 function Contact() {
   const handleInstagramClick = () => {
@@ -19,17 +19,25 @@ function Contact() {
   };
 
   return (
-    <div className="contact">
+    <div className="contact" id="contact">
       <div className="contact__container">
         <h2 className="contact__followMe">Follow Me</h2>
         <div className="contact__socials">
-          <div className="contact__socials_content">
+          <div className="contact__socials-content">
             <button
               className="contact__social"
               type="button"
               onClick={handleInstagramClick}
             ></button>
             <p className="contact__social-text">@amber_broihier</p>
+          </div>
+          <div className="contact__socials-content">
+            <img
+              src={phoneImg}
+              alt="Image of phone"
+              className="contact__socials-content-img"
+            />
+            <p className="contact__social-text">PH: (920) 999-9999</p>
           </div>
         </div>
       </div>

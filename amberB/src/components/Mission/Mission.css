@@ -5,15 +5,19 @@
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
-  position: absolute;
-  right: 740px;
-  bottom: 43px;
   width: 500px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  position: absolute;
+  bottom: 10px;
+  left: 201px;
 }
 
 .mission__title {
   display: flex;
   justify-content: center;
+  font-weight: 900;
+  background-color: #f0f8ff7a;
 }
 
 .mission__info {

@@ -1,44 +1,26 @@
 import React from "react";
 import "./BookOnline.css";
-import flower from "../../assets//title_array/logo1.png";
+
 function BookOnline() {
   return (
     <section className="bookonline">
-      <h1 className="bookonline__title">Book Now</h1>
-
-      <div className="bookonline__container">
-        <div className="bookonline__product">
-          <img src={flower} alt="flower" className="bookonline__product-img" />
-          <div className="bookonline__product-content">
-            <h3 className="bookonline__product-title">Romanticizing My Life</h3>
-            <p className="bookonline__product-price">$25</p>
-            <button className="bookonline__product-btn">Book Now</button>
-          </div>
-        </div>
-
-        <div className="bookonline__product">
-          <img src={flower} alt="flower" className="bookonline__product-img" />
-          <div className="bookonline__product-content">
-            <h3 className="bookonline__product-title">
-              Chasing Waterfalls: A local day retreat
-            </h3>
-            <p className="bookonline__product-text">Manifesting your Future</p>
-            <p className="bookonline__product-price">$25</p>
-            <button className="bookonline__product-btn">Book Now</button>
-          </div>
-        </div>
-        <div className="bookonline__product">
-          <img src={flower} alt="flower" className="bookonline__product-img" />
-          <div className="bookonline__product-content">
-            <h3 className="bookonline__product-title">
-              Chasing Waterfalls: A local day retreat
-            </h3>
-            <p className="bookonline__product-text">Manifesting your Future</p>
-            <p className="bookonline__product-price">$25</p>
-            <button className="bookonline__product-btn">Book Now</button>
-          </div>
-        </div>
+      <div className="bookonline__header">
+        <h1 className="bookonline__header-title">Book your Transformation</h1>
+        <p className="bookonline__header-text">
+          Choose from our carefully crafted self-love empowerment sessions
+          designed to
+        </p>
+        <p className="bookonline__header-text">
+          help you manifest your best life and embrace your authentic self.
+        </p>
       </div>
+      <div className="bookonline__available">
+        <h1 className="bookonline__available-title">Available Sessions</h1>
+        <p className="bookonline__available-text">
+          Select the session that resonates with your journey
+        </p>
+      </div>
+      <div className="bookonline__services"></div>
     </section>
   );
 }

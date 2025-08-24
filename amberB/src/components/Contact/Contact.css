@@ -22,7 +22,7 @@
   font-weight: 500;
 }
 
-.contact__socials_content {
+.contact__socials-content {
   display: flex;
 }
 
@@ -38,8 +38,16 @@
   padding: 0;
   background-repeat: no-repeat;
   background-position: center;
+  margin: 10px;
 }
 
 .contact__social-text {
   color: #000000;
+  margin: auto 0 auto 0;
+}
+
+.contact__socials-content-img {
+  height: 48px;
+  width: 48px;
+  margin: 10px;
 }

@@ -4,13 +4,18 @@
 }
 
 .dropdown__button {
-  padding: 10px 20px;
+  padding: 5px;
   background-color: transparent;
   color: #000000;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 18px;
+}
+
+.dropdown__button:hover {
+  background-color: gray;
+  color: white;
 }
 
 .dropdown__menu {

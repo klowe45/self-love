@@ -5,7 +5,7 @@ const User = require("../models/userModel");
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret";
 const JWT_EXPRIRES_IN = "7d";
 
-exports.signUp = async (req, res, next) => {
+async function signUp(req, res, next) {
   try {
     const {
       firstName,
@@ -47,12 +47,12 @@ exports.signUp = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+}
 
-exports.signIn = async (req, res, next) => {
+async function signIn(req, res, next) {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
     if (!user)
       return res.status(401).json({ message: "Invalid email or password" });
 
@@ -79,4 +79,6 @@ exports.signIn = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+}
+
+module.exports = { signIn, signUp };

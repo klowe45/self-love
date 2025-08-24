@@ -1,63 +1,78 @@
 const express = require("express");
 const mongoose = require("mongoose");
-require("dotenv").config({ path: "./config.env" });
 const cors = require("cors");
-
-const mainRouter = require("./routes/index");
-const authRoutes = require("./middleware/auth");
+require("dotenv").config({ path: "./config.env" });
 
 const app = express();
+const mainRouter = require("./routes/index");
+const authRoutes = require("./routes/auth_router");
 
-//middleware//
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-//health check//
 app.get("/health", (_req, res) => res.json({ ok: true }));
+app.get("/ready", (_req, res) => {
+  const states = ["disconnected", "connected", "connecting", "disconnecting"];
+  res.json({ state: states[mongoose.connection.readyState] });
+});
 
-//error handler//
 function errorHandler(err, _req, res, _next) {
-  console.error(err);
-  const status = err.statusCode || 500;
-  res.status(status).json({ message: err.message || "Server error" });
+  console.error("Server error:", err);
+  res
+    .status(err.statusCode || 500)
+    .json({ message: err.message || "Server error" });
 }
 
-async function start() {
-  const PORT = process.env.PORT || 3000;
-  const mongoUri = process.env.ATLAS_URI; // e.g., from config.env
-  const dbName = process.env.MONGO_DB || "app"; // optional, defaults to "app"
+function buildMongoUriFromEnv() {
+  const host = (process.env.MONGO_HOST || "").trim();
+  const user = (process.env.MONGO_USER || "").trim();
+  const pass = (process.env.MONGO_PASS || "").trim();
+  if (!host || !user || !pass)
+    throw new Error("Missing MONGO_HOST/USER/PASS or ATLAS_URI");
+  return `mongodb+srv://${encodeURIComponent(user)}:${encodeURIComponent(
+    pass
+  )}@${host}/?retryWrites=true&w=majority`;
+}
+function redact(uri) {
+  return uri.replace(
+    /(mongodb\+srv:\/\/[^:]+:)([^@]+)(@)/,
+    (_, a, _pw, b) => `${a}****${b}`
+  );
+}
 
-  if (!mongoUri) {
-    console.error("❌ ATLAS_URI is missing. Put it in config.env");
-    process.exit(1);
-  }
+(async () => {
+  const PORT = Number(process.env.PORT) || 4000;
+  const dbName = (process.env.MONGO_DB || "app").trim();
+  const atlas = (process.env.ATLAS_URI || "").trim();
+  const uri = atlas || buildMongoUriFromEnv();
+
+  console.log("Connecting to MongoDB:", redact(uri), "db:", dbName);
+  mongoose.set("strictQuery", true);
 
   try {
-    // Connect to MongoDB with Mongoose
-    await mongoose.connect(mongoUri, { dbName });
-    console.log("✅ Connected to MongoDB via Mongoose");
+    await mongoose.connect(uri, {
+      dbName,
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
+    });
+    console.log("✅ Connected to MongoDB");
 
-    // Routes
-    app.use("/auth", authRoutes); // POST /signup, POST /signin
-    app.use("/", mainRouter); // keep your existing routes (optional)
+    mongoose.connection.on("error", (e) => console.error("Mongo error:", e));
+    mongoose.connection.on("disconnected", () =>
+      console.warn("Mongo disconnected")
+    );
 
-    // Error handler must come after routes
+    app.use("/auth", authRoutes);
+    app.use("/", mainRouter);
+
+    app.use((_req, res) => res.status(404).json({ message: "Not Found" }));
     app.use(errorHandler);
 
-    const server = app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
-
-    // Graceful shutdown
-    process.on("SIGINT", async () => {
-      console.log("\n🧹 Shutting down...");
-      await mongoose.disconnect();
-      server.close(() => process.exit(0));
-    });
-  } catch (err) {
-    console.error("❌ Failed to connect to MongoDB", err);
+    app.listen(PORT, "0.0.0.0", () =>
+      console.log(`🚀 Server on http://localhost:${PORT}`)
+    );
+  } catch (e) {
+    console.error("❌ Server startup failed:", e);
     process.exit(1);
   }
-}
-
-start();
+})();

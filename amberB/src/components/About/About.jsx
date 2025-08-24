@@ -1,11 +1,18 @@
 import React from "react";
 import "./About.css";
 import AboutCards from "../AboutCards/AboutCards";
+import SlideShow from "../SlideShow/SlideShow";
+import logo1 from "../../assets/title_array/logo1.png";
+import logo2 from "../../assets/title_array/logo2.png";
+import logo3 from "../../assets/title_array/logo3.png";
 
 function About() {
+  const flowerArray = [logo1, logo2, logo3];
+
   return (
     <section className="about">
       <div className="about__content">
+        <SlideShow images={flowerArray} />
         <AboutCards />
       </div>
     </section>
@@ -13,13 +20,3 @@ function About() {
 }
 
 export default About;
-
-/*<iframe
-          className="about__video"
-          width="900px"
-          height="500px"
-          src="https://www.youtube.com/embed/23f3Q4Aw_aw?si=lBilKpby9kxweTam"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>*/

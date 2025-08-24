@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useActionState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
 function SignInModal({
@@ -7,17 +7,22 @@ function SignInModal({
   handleSignUpModal,
   handleSignInSubmit,
 }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const initial = { success: false, error: null };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  async function logUserIn(prevState, formData) {
+    try {
+      const payload = {
+        email: formData.get("email"),
+        password: formData.get("password"),
+      };
+      await handleSignInSubmit(payload);
+      return { success: true, error: null };
+    } catch (err) {
+      return { success: false, error: err?.message || "Sign in Failed" };
+    }
+  }
 
-    handleSignInSubmit({
-      email,
-      password,
-    });
-  };
+  const [data, formAction, isPending] = useActionState(logUserIn, initial);
 
   return (
     <ModalWithForm
@@ -28,17 +33,18 @@ function SignInModal({
       buttonText={"Sign In"}
       buttonText2={"Sign Up"}
       toggleButton={handleSignUpModal}
-      onSubmit={onSubmit}
+      formAction={formAction}
+      isPending={isPending}
+      data={data}
     >
       <label htmlFor="name-signin" className="modal__label">
-        Name:{""}
+        Email:{""}
         <input
-          type="text"
+          type="email"
           className="modal__input"
           id="name-signin"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Email"
+          name="email"
         ></input>
       </label>
       <label htmlFor="password-signin" className="modal__label">
@@ -48,8 +54,7 @@ function SignInModal({
           id="password-signin"
           className="modal__input"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          name="password"
         ></input>
       </label>
     </ModalWithForm>

@@ -1,40 +1,66 @@
-const BASE = import.meta.env.VITE_API_BASE || "http://localhost:4000";
+const baseFromEnv = (
+  import.meta.env.VITE_API_BASE || "http://localhost:4000"
+).trim();
+const BASE = baseFromEnv.replace(/\/$/, ""); // no trailing slash
 
-export async function signUp({
-  firstName,
-  lastName,
-  email,
-  password,
-  phoneNumber,
-  mailingAddress,
-}) {
-  const res = await fetch(`${BASE}/auth/signup`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      firstName,
-      lastName,
-      email,
-      password,
-      phoneNumber,
-      mailingAddress,
-    }),
+function normalizeError(res, data) {
+  const msg = (data && (data.message || data.error)) || `HTTP ${res.status}`;
+  const err = new Error(msg);
+  err.status = res.status;
+  err.data = data;
+  return err;
+}
+
+async function request(path, { headers = {}, ...opts } = {}) {
+  const res = await fetch(`${BASE}${path}`, {
+    headers: { "Content-Type": "application/json", ...headers },
+    ...opts,
   });
-  const data = await res.json();
-  if (!res.ok) throw data; // { message: ... }
-  // Optional: persist token
-  localStorage.setItem("token", data.token);
+
+  // response might not be JSON on errors, so guard it
+  let data = null;
+  try {
+    data = await res.json();
+  } catch (_) {
+    /* ignore */
+  }
+
+  if (!res.ok) throw normalizeError(res, data);
   return data;
 }
 
-export async function signIn(email, password) {
-  const res = await fetch(`${BASE}/api/auth/signin`, {
+// ---- Public API ----
+
+export async function signUp(payload) {
+  const data = await request(`/auth/signup`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (data?.token) localStorage.setItem("token", data.token);
+  return data;
+}
+
+export async function signIn({ email, password }) {
+  const data = await request(`/auth/signin`, {
+    method: "POST",
     body: JSON.stringify({ email, password }),
   });
-  const data = await res.json();
-  if (!res.ok) throw data;
-  localStorage.setItem("token", data.token);
+  if (data?.token) localStorage.setItem("token", data.token);
   return data;
+}
+
+export function getToken() {
+  return localStorage.getItem("token");
+}
+
+export function signOut() {
+  localStorage.removeItem("token");
+}
+
+// Use this for authenticated requests later:
+export async function authRequest(path, options = {}) {
+  const token = getToken();
+  const headers = { ...(options.headers || {}) };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return request(path, { ...options, headers });
 }

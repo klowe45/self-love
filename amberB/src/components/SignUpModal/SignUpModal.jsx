@@ -7,13 +7,6 @@ function SignUpModal({
   handleSignInModal,
   handleSignUpSubmit,
 }) {
-  /*const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [mailingAddress, setMailingAddress] = useState("");*/
-
   const initial = { success: false, error: null };
 
   async function saveUser(prevState, formData) {
@@ -21,6 +14,7 @@ function SignUpModal({
       const payload = {
         firstName: formData.get("firstName"),
         lastName: formData.get("lastName"),
+        email: formData.get("email"),
         password: formData.get("password"),
         phoneNumber: formData.get("phoneNumber"),
         mailingAddress: formData.get("mailingAddress"),
@@ -110,7 +104,7 @@ function SignUpModal({
       </label>
 
       {data.error && <p className="modal__error">{data.error}</p>}
-      {data.error && <p className="modal__success">{"Account Created!"}</p>}
+      {data.success && <p className="modal__success">{"Account Created!"}</p>}
     </ModalWithForm>
   );
 }

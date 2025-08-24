@@ -4,13 +4,15 @@ import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
 import Footer from "./components/Footer/Footer";
 import Workshop from "./components/Workshop/Workshop";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Contact from "./components/Contact/Contact";
 import BookOnline from "./components/BookOnline/BookOnline";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import Mission from "./components/Mission/Mission";
 import SignUpModal from "./components/SignUpModal/SignUpModal";
 import SignInModal from "./components/SignInModal/SignInModal";
-import * as auth from "../src/components/utils/auth";
+import * as auth from "./components/utils/auth";
+import * as token from "./components/utils/Token";
 function App() {
   /*****************************************************************/
   /*                             Modal                             */
@@ -47,15 +49,27 @@ function App() {
     username: "",
   };
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  useEffect(() => {
+    const onStorage = () => setIsLoggedIn(!!localStorage.getItem("token"));
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
 
   /*****************************************************************/
   /*                           Sign Up                             */
   /*****************************************************************/
 
   const handleSignUpSubmit = async (payload) => {
-    const { firstName, lastName, password, phoneNumber, mailingAddress } =
-      payload;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNumber,
+      mailingAddress,
+    } = payload;
 
     try {
       console.log("Submit Button Working", payload);
@@ -63,12 +77,15 @@ function App() {
       await auth.signUp({
         firstName,
         lastName,
+        email,
         password,
         phoneNumber,
         mailingAddress,
       });
       const data = await auth.signIn({ email, password });
+      setIsLoggedIn(true);
       console.log("Sign In Completed", data);
+      return data;
     } catch (err) {
       console.error("Failed to create user.", err);
       throw new Error(err?.message || "Failed to create user.");
@@ -79,26 +96,39 @@ function App() {
   /*                           Sign In                             */
   /*****************************************************************/
 
-  const handleSignInSubmit = async () => {
+  const handleSignInSubmit = async ({ email, password }) => {
     try {
-      console.log({ email, password });
-      await auth.signIn({ email, password });
-      const data = await auth.signIn(email, password);
-
+      const data = await auth.signIn({ email, password });
+      setIsLoggedIn(true);
       localStorage.setItem("token", data.token);
-      console.log("signed in comeplete", data);
+      closeModal();
+      console.log({ email, password }, "Log in success");
+      return data;
     } catch (err) {
       console.error("sign in failed", err);
+      throw new Error(err?.message || "Sign in failed");
     }
   };
+
+  /*****************************************************************/
+  /*                            Log Out                            */
+  /*****************************************************************/
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    console.log("Log out success");
+  };
+
   return (
     <div className="page">
       <div className="page__content">
         <Header
           activeModal={activeModal}
           handleSignInModal={handleSignInModal}
+          isLoggedIn={isLoggedIn}
+          handleLogout={handleLogout}
         />
-
         <Routes>
           <Route
             path="/"
