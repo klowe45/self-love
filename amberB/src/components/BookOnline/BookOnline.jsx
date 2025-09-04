@@ -1,5 +1,6 @@
 import React from "react";
 import "./BookOnline.css";
+import ServiceList from "../ServicesList/ServicesList";
 
 function BookOnline() {
   return (
@@ -19,6 +20,7 @@ function BookOnline() {
         <p className="bookonline__available-text">
           Select the session that resonates with your journey
         </p>
+        <ServiceList />
       </div>
       <div className="bookonline__services"></div>
     </section>

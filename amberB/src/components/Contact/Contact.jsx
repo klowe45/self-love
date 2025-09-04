@@ -20,24 +20,32 @@ function Contact() {
 
   return (
     <div className="contact" id="contact">
+      <h2 className="contact__title">Follow Me</h2>
       <div className="contact__container">
-        <h2 className="contact__followMe">Follow Me</h2>
-        <div className="contact__socials">
-          <div className="contact__socials-content">
-            <button
-              className="contact__social"
-              type="button"
-              onClick={handleInstagramClick}
-            ></button>
+        <div className="contact__social-instagram">
+          <button
+            className="contact__social-btn"
+            type="button"
+            onClick={handleInstagramClick}
+          ></button>
+          <div className="contact__social-instagram-text">
             <p className="contact__social-text">@amber_broihier</p>
+            <p className="contact__social-text">
+              Follow my journey on Instagram
+            </p>
           </div>
-          <div className="contact__socials-content">
-            <img
-              src={phoneImg}
-              alt="Image of phone"
-              className="contact__socials-content-img"
-            />
+        </div>
+        <div className="contact__social-phone">
+          <img
+            src={phoneImg}
+            alt="Image of phone"
+            className="contact__social-phone-img"
+          />
+          <div className="contact__social-phone-text">
             <p className="contact__social-text">PH: (920) 999-9999</p>
+            <p className="contact__social-text">
+              Ready to start your transformation?
+            </p>
           </div>
         </div>
       </div>

@@ -1,20 +1,31 @@
-import React from "react";
 import "./ServiceCard.css";
-import flower from "../../assets/flower_array/flower_array1.png";
 
-function ServiceCard() {
-  const img = this.img;
-  const title = this.title;
-  const descripstion = this.descripstion;
-  const price = this.price;
+const DEFAULT_STATE = {
+  serviceTitle: "Title",
+  subtitle: "Subtitle (Optional)",
+  price: "$00",
+  description: "Description will go here..",
+};
+
+function ServiceCard({ service, imageSrc }) {
+  const { serviceTitle, subtitle, price, description } = {
+    ...service,
+  };
 
   return (
     <div className="service__card">
-      <img className="service__card-img" src={img} alt="image of flower" />
-      <h3 className="service__card-title">{title}</h3>
-      <p className="service__card-descripstion">{descripstion}</p>
-      <p className="service__card-price">{price}</p>
-      <button className="service__card-btn">{"Add to Cart"}</button>
+      <div className="serivce__card-block">
+        <div className="service__card-img-container">
+          <img className="service__card-img" src={imageSrc} alt="flower" />
+        </div>
+        <h3 className="service__card-title">{serviceTitle}</h3>
+        <p className="service__card-subtitle">{subtitle}</p>
+        <p className="service__card-description">{description}</p>
+        <div className="service__card-price-booknow-container">
+          <p className="service__card-price">{`$${price}`}</p>
+          <button className="service__card-booknow">Book Now</button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -5,7 +5,6 @@ require("dotenv").config({ path: "./config.env" });
 
 const app = express();
 const mainRouter = require("./routes/index");
-const authRoutes = require("./routes/auth_router");
 
 app.use(cors());
 app.use(express.json());
@@ -62,7 +61,6 @@ function redact(uri) {
       console.warn("Mongo disconnected")
     );
 
-    app.use("/auth", authRoutes);
     app.use("/", mainRouter);
 
     app.use((_req, res) => res.status(404).json({ message: "Not Found" }));

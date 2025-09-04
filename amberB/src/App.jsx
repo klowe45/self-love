@@ -14,6 +14,7 @@ import SignInModal from "./components/SignInModal/SignInModal";
 import * as auth from "./components/utils/auth";
 import * as token from "./components/utils/Token";
 import AddServices from "./components/AddServices/AddServices";
+import LearnGrowLove from "./components/LearnGrowLove/LearnGrowLove";
 
 function App() {
   /*****************************************************************/
@@ -54,6 +55,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   useEffect(() => {
+    setIsLoggedIn(!!auth.getToken());
     const onStorage = () => setIsLoggedIn(!!localStorage.getItem("token"));
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
@@ -86,6 +88,7 @@ function App() {
       });
       const data = await auth.signIn({ email, password });
       setIsLoggedIn(true);
+      closeModal();
       console.log("Sign In Completed", data);
       return data;
     } catch (err) {
@@ -145,7 +148,9 @@ function App() {
           <Route path="/addservice" element={<AddServices />} />
           <Route path="*" element={<h1>Page Not Found</h1>} />
         </Routes>
+        <Mission />
         <Contact />
+        <LearnGrowLove />
         <Footer />
       </div>
       <SignUpModal
