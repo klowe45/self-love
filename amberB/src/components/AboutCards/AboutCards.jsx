@@ -44,7 +44,7 @@ function AboutCards() {
             alt="amber standing while smiling and holding self love business card next to face"
             className="about__card-img"
           />
-          <h3 className="about__card-text">Damn im so fucking sexy</h3>
+          <h3 className="about__card-text">Inner Beauty</h3>
         </div>
 
         <div className="about__card">

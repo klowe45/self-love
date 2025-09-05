@@ -3,16 +3,19 @@
   margin: auto;
   padding: 0;
   color: #000000;
+  html {
+    scroll-behavior: smooth;
+  }
+  width: 100%;
 }
 
 .page {
-  max-width: 1440px;
+  width: 100%;
   min-height: 100vh;
   background-color: #f5f6f7;
 }
 
 .page__content {
-  width: 1440px;
   margin: 0 auto;
   padding: 20px;
   min-height: 100vh;

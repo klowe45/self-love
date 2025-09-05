@@ -1,18 +1,15 @@
 .slideshow-container {
-  height: 200px;
-  overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
 }
 
 .slideshow__image {
-  height: 480px;
+  height: 440px;
   width: 420px;
   object-fit: cover;
   background-position: center;
   transition: ease-in-out;
   position: absolute;
-  top: 110px;
-  left: 210px;
+  top: -83px;
+  left: 64px;
 }
