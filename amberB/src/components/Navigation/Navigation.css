@@ -1,17 +1,17 @@
 .header__nav {
   display: flex;
-  margin: 10px 0 10px 0;
+  margin: 10px auto 10px auto;
+  max-width: 59%;
 }
 
-.header__nav-links {
-  list-style-type: none;
+.header__nav-container {
   display: flex;
 }
 
 .header__nav-btn {
   background-color: transparent;
   color: #000000;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   padding: 5px;
 }
@@ -22,12 +22,15 @@
 }
 
 .header__nav-btn-link {
+  display: flex;
+  justify-content: space-evenly;
   background-color: transparent;
   color: #000000;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   padding: 5px;
   border-radius: 8px;
+  width: 100%;
 }
 
 .header__nav-btn-link:hover {

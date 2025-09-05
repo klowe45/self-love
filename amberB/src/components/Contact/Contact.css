@@ -30,6 +30,7 @@
   border-radius: 15px;
   box-shadow: 2px 6px 10px rgba(0, 0, 0, 1);
   background-color: white;
+  max-width: 301px;
 }
 
 .contact__social-instagram:hover {
@@ -50,6 +51,7 @@
   border-radius: 15px;
   box-shadow: 2px 6px 10px rgba(0, 0, 0, 1);
   background-color: white;
+  max-width: 337px;
 }
 
 .contact__social-phone:hover {

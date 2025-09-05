@@ -1,9 +1,6 @@
 .slideshow-container {
-  height: 200px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
+  position: relative;
 }
 
 .slideshow__image {
@@ -13,6 +10,6 @@
   background-position: center;
   transition: ease-in-out;
   position: absolute;
-  top: -84px;
-  left: -12px;
+  top: -83px;
+  left: 64px;
 }

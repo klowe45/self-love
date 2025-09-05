@@ -9,7 +9,7 @@ function LearnGrowLove() {
           Your journey to self-love and empowerment starts with a single step.
           Let's work
         </p>
-        <p className="learn__text">
+        <p className="learn__text-bottom">
           together to unlock your fullest potential.
         </p>
       </div>

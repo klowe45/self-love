@@ -83,10 +83,12 @@ function AddServices() {
   return (
     <section className="services">
       <div className="services__header">
-        <button className="services__return-btn" onClick={handleReturn}>
-          Return
-        </button>
-        <h1 className="services__title">Add New Service</h1>
+        <div className="services__header-return-title">
+          <button className="services__return-btn" onClick={handleReturn}>
+            Return
+          </button>
+          <h1 className="services__title">Add New Service</h1>
+        </div>
         <p className="services__description">
           Create a new self-love empowerment session
         </p>
@@ -110,7 +112,7 @@ function AddServices() {
                   />
                 </label>
               </li>
-              <li>
+              <li className="services__form-list-item">
                 <label className="services__form-label">
                   {"Subtitle (Optional)"}
                   <input
@@ -121,7 +123,7 @@ function AddServices() {
                   />
                 </label>
               </li>
-              <li>
+              <li className="services__form-list-item">
                 <label className="services__form-label">
                   {"Price (USD) *"}
                   <input
@@ -133,7 +135,7 @@ function AddServices() {
                 </label>
               </li>
             </ul>
-            <div className="services__form-label">
+            <div className="services__form-label-description">
               Description *
               <input
                 type="text"

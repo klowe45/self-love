@@ -24,65 +24,56 @@ function Navigation({ closeModal, activeModal, isLoggedIn }) {
 
   return (
     <nav className="header__nav">
-      <ul className="header__nav-links">
-        <li>
-          <button
-            className="header__nav-btn"
-            onClick={() => navigate("/")}
-            aria-label="Go to Home"
+      <button
+        className="header__nav-btn"
+        onClick={() => navigate("/")}
+        aria-label="Go to Home"
+      >
+        Home
+      </button>
+
+      <button
+        className="header__nav-btn"
+        aria-label="Go to Mission"
+        type="button"
+        onClick={() => goToSection("mission")}
+      >
+        Mission
+      </button>
+
+      <ServicesDropDown
+        closeModal={closeModal}
+        isOpen={activeModal === "dropDownMenu"}
+      />
+
+      {isLoggedIn && (
+        <>
+          <Link
+            to={"/bookonline"}
+            className="header__nav-btn-link"
+            aria-label="Go to Book Online"
           >
-            Home
-          </button>
-        </li>
-        <li>
-          <button
-            className="header__nav-btn"
-            aria-label="Go to Mission"
-            type="button"
-            onClick={() => goToSection("mission")}
+            Book Online
+          </Link>
+
+          <Link
+            className="header__nav-btn-link"
+            to={"/addservice"}
+            aria-label="Adding serivces"
           >
-            Mission
-          </button>
-        </li>
-        <li className="dropdown">
-          <ServicesDropDown
-            closeModal={closeModal}
-            isOpen={activeModal === "dropDownMenu"}
-          />
-        </li>
-        {isLoggedIn && (
-          <>
-            <li>
-              <Link
-                to={"/bookonline"}
-                className="header__nav-btn-link"
-                aria-label="Go to Book Online"
-              >
-                Book Online
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="header__nav-btn-link"
-                to={"/addservice"}
-                aria-label="Adding serivces"
-              >
-                Add Service
-              </Link>
-            </li>
-          </>
-        )}
-        <li>
-          <button
-            className="header__nav-btn"
-            aria-label="Go to Contact"
-            type="button"
-            onClick={() => goToSection("contact")}
-          >
-            Contact
-          </button>
-        </li>
-      </ul>
+            Add Service
+          </Link>
+        </>
+      )}
+
+      <button
+        className="header__nav-btn"
+        aria-label="Go to Contact"
+        type="button"
+        onClick={() => goToSection("contact")}
+      >
+        Contact
+      </button>
     </nav>
   );
 }

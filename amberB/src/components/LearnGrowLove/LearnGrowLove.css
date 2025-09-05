@@ -12,6 +12,8 @@
   color: white;
   font-size: 44px;
   font-weight: 700;
+  display: flex;
+  justify-content: center;
 }
 
 .learn__text {
@@ -19,4 +21,12 @@
   font-size: 18px;
   font-weight: 500;
   max-width: 651px;
+}
+
+.learn__text-bottom {
+  display: flex;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
 }

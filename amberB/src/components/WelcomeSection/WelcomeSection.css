@@ -1,0 +1,32 @@
+.welcome {
+  background-color: rgba(255, 192, 203, 0.241);
+  padding: 50px 100px 70px 100px;
+  width: 100%;
+}
+
+.welcome__container {
+  display: flex;
+  flex-direction: column;
+  max-width: 590px;
+  margin: 0 100px 0 auto;
+}
+
+.welcome__title {
+  font-size: 43px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.welcome__description {
+  font-size: 18px;
+  font-weight: 500;
+  opacity: 50%;
+  margin-bottom: 20px;
+}
+
+.welcome__button {
+  color: #ffffff;
+  max-width: 179px;
+  margin: 0 auto 0 0;
+}

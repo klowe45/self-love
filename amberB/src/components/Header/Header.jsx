@@ -1,6 +1,4 @@
-import React from "react";
 import "./Header.css";
-import avatar from "../../assets/amber_avatar.jpg";
 import Navigation from "../Navigation/Navigation";
 import shoppingCart from "../../assets/icons/cart.svg";
 
@@ -20,12 +18,12 @@ function Header({
         <h2 className="header__info">
           Ms. Amber Broihier, M.Ed. BBA Self Love Empowerment Teacher
         </h2>
-        <div className="header__navi-container">
-          <Navigation
-            openDropDownMenu={openDropDownMenu}
-            isLoggedIn={isLoggedIn}
-          />
-        </div>
+
+        <Navigation
+          openDropDownMenu={openDropDownMenu}
+          isLoggedIn={isLoggedIn}
+        />
+
         {!isLoggedIn ? (
           <button className="header__signin" onClick={handleOnSignInClick}>
             Sign In
