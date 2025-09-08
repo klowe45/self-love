@@ -4,6 +4,7 @@ import defaultImage from "../../assets/flower_array/flower_array1.png";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useActionState } from "react";
 import ServiceCard from "../ServiceCard/ServiceCard";
+import { createService } from "../utils/auth";
 
 const INITIAL_STATE = {
   success: false,
@@ -22,7 +23,7 @@ const DEFAULT_STATE = {
   description: "",
 };
 
-function AddServices() {
+function AddServices({ submitService }) {
   const navigate = useNavigate();
 
   const handleReturn = () => {
@@ -42,10 +43,44 @@ function AddServices() {
       const price = formData.get("price");
       const description = formData.get("description");
 
-      return {
-        success: true,
-        service: { serviceTitle, subtitle, price, description },
-      };
+      if (!serviceTitle || !price || !description) {
+        return {
+          ...prevState,
+          success: true,
+          error: "Please fill in Service Title, Price, and Description.",
+          service: { serviceTitle, subtitle, price, description },
+        };
+      }
+      try {
+        const payload = new FormData();
+        payload.append("serviceTitle", serviceTitle);
+        payload.append("subtitle", subtitle || "");
+        payload.append("price", price);
+        payload.append("description", description);
+        if (imageFile && imageFile.size > 0) {
+          payload.append("image", imageFile);
+        }
+
+        const created = await createService(payload);
+
+        return {
+          success: true,
+          error: "",
+          service: created?.service || {
+            serviceTitle,
+            subtitle,
+            price,
+            description,
+          },
+        };
+      } catch (err) {
+        return {
+          ...prevState,
+          success: false,
+          error: err.message || "Failed to create service.",
+          service: { serviceTitle, subtitle, price, description },
+        };
+      }
     },
     INITIAL_STATE
   );
@@ -94,7 +129,11 @@ function AddServices() {
         </p>
       </div>
       <div className="services__container">
-        <form action={submitAction} className="services__form">
+        <form
+          action={submitAction}
+          className="services__form"
+          enctype="multipart/form-data"
+        >
           <h3 className="services__form-title">Service Details</h3>
           <p className="services__form-description">
             Fill in the information for your new offering
@@ -177,7 +216,7 @@ function AddServices() {
               tpye="submit"
               disabled={isPending}
             >
-              Create Service
+              {isPending ? "Creating..." : "Create Service"}
             </button>
           </div>
         </form>

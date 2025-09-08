@@ -1,7 +1,7 @@
 const baseFromEnv = (
   import.meta.env.VITE_API_BASE || "http://localhost:4000"
 ).trim();
-const BASE = baseFromEnv.replace(/\/$/, ""); // no trailing slash
+const BASE = baseFromEnv.replace(/\/$/, "");
 
 function normalizeError(res, data) {
   const msg = (data && (data.message || data.error)) || `HTTP ${res.status}`;
@@ -21,15 +21,13 @@ async function request(path, { headers = {}, ...opts } = {}) {
   let data = null;
   try {
     data = await res.json();
-  } catch (_) {
-    /* ignore */
-  }
+  } catch (_) {}
 
   if (!res.ok) throw normalizeError(res, data);
   return data;
 }
 
-// ---- Public API ----
+// ---- Sign in, sign up ----
 
 export async function signUp(payload) {
   const data = await request(`/auth/signup`, {
@@ -57,10 +55,25 @@ export function signOut() {
   localStorage.removeItem("token");
 }
 
-// Use this for authenticated requests later:
 export async function authRequest(path, options = {}) {
   const token = getToken();
   const headers = { ...(options.headers || {}) };
   if (token) headers.Authorization = `Bearer ${token}`;
   return request(path, { ...options, headers });
+}
+
+// ---- services ----
+
+export async function createService(formData) {
+  const res = await fetch(`/auth/services`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `Request failed with ${res.status}`);
+  }
+
+  return res.json();
 }

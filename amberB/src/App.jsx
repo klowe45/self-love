@@ -125,6 +125,28 @@ function App() {
     console.log("Log out success");
   };
 
+  /*****************************************************************/
+  /*                            Services                           */
+  /*****************************************************************/
+
+  const handleCreateServiceSubmit = async ({
+    serviceTitle,
+    subtitle,
+    price,
+    description,
+    image,
+  }) => {
+    const data = await auth.createService({
+      serviceTitle,
+      subtitle,
+      price,
+      description,
+      image,
+    });
+    console.log(data);
+    return data;
+  };
+
   return (
     <div className="page">
       <div className="page__content">
@@ -145,7 +167,10 @@ function App() {
           ></Route>
           <Route path="/workshop" element={<Workshop />} />
           <Route path="/bookonline" element={<BookOnline />} />
-          <Route path="/addservice" element={<AddServices />} />
+          <Route
+            path="/addservice"
+            element={<AddServices submitService={handleCreateServiceSubmit} />}
+          />
           <Route path="*" element={<h1>Page Not Found</h1>} />
         </Routes>
         <Mission />
