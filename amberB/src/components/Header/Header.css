@@ -25,6 +25,9 @@
 }
 
 .header__signin {
+  max-width: 165px;
+  border: 1px solid #000000;
+  border-radius: 20px;
   padding: 5px;
   margin: 10px;
   background-color: transparent;
@@ -35,7 +38,7 @@
 }
 
 .header__signin:hover {
-  border: 1px solid;
+  background-color: rgba(255, 192, 203, 0.241);
 }
 
 .header__cart {

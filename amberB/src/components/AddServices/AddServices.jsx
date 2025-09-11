@@ -3,14 +3,13 @@ import "./AddServices.css";
 import defaultImage from "../../assets/flower_array/flower_array1.png";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useActionState } from "react";
-import ServiceCard from "../ServiceCard/ServiceCard";
 import { createService } from "../utils/auth";
 
 const INITIAL_STATE = {
   success: false,
   service: {
     serviceTitle: "Title",
-    subtitle: "Subtitle (Optional",
+    subtitle: "Subtitle (Optional)",
     price: "00",
     description: "Description will go here..",
   },
@@ -23,7 +22,7 @@ const DEFAULT_STATE = {
   description: "",
 };
 
-function AddServices({ submitService }) {
+function AddServices() {
   const navigate = useNavigate();
 
   const handleReturn = () => {
@@ -34,6 +33,32 @@ function AddServices({ submitService }) {
     }
   };
 
+  /* image states */
+
+  const [imageSrc, setImageSrc] = useState(defaultImage);
+  const fileRef = useRef(null);
+  const objectUrlRef = useRef(null);
+
+  const openFilePicker = () => {
+    fileRef.current?.click();
+  };
+
+  const onImgChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+
+    const url = URL.createObjectURL(file);
+    objectUrlRef.current = url;
+    setImageSrc(url);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
+    };
+  }, []);
+
   /*handling of form*/
 
   const [data, submitAction, isPending] = useActionState(
@@ -42,26 +67,18 @@ function AddServices({ submitService }) {
       const subtitle = formData.get("subtitle");
       const price = formData.get("price");
       const description = formData.get("description");
+      const imageFile = formData.get("image");
 
       if (!serviceTitle || !price || !description) {
         return {
           ...prevState,
-          success: true,
+          success: false,
           error: "Please fill in Service Title, Price, and Description.",
-          service: { serviceTitle, subtitle, price, description },
+          service: { serviceTitle, subtitle, price, description, imageFile },
         };
       }
       try {
-        const payload = new FormData();
-        payload.append("serviceTitle", serviceTitle);
-        payload.append("subtitle", subtitle || "");
-        payload.append("price", price);
-        payload.append("description", description);
-        if (imageFile && imageFile.size > 0) {
-          payload.append("image", imageFile);
-        }
-
-        const created = await createService(payload);
+        const created = await createService(formData);
 
         return {
           success: true,
@@ -87,34 +104,6 @@ function AddServices({ submitService }) {
 
   const service = data?.service ?? DEFAULT_STATE;
 
-  /* image states */
-
-  const [imageSrc, setImageSrc] = useState(defaultImage);
-
-  const fileRef = useRef(null);
-  const objectUrlRef = useRef(null);
-
-  const openFilePicker = () => {
-    fileRef.current?.click();
-    console.log("clicked");
-  };
-
-  const onImgChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
-
-    const url = URL.createObjectURL(file);
-    objectUrlRef.current = url;
-    setImageSrc(url);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
-    };
-  }, []);
-
   return (
     <section className="services">
       <div className="services__header">
@@ -132,7 +121,8 @@ function AddServices({ submitService }) {
         <form
           action={submitAction}
           className="services__form"
-          enctype="multipart/form-data"
+          method="post"
+          encType="multipart/form-data"
         >
           <h3 className="services__form-title">Service Details</h3>
           <p className="services__form-description">
@@ -207,13 +197,13 @@ function AddServices({ submitService }) {
             </button>
           </div>
 
-          <ServiceCard service={service} imageSrc={imageSrc} />
-
           <div className="services__form-btns">
-            <button className="services__form-cancel-btn">Cancel</button>
+            <button className="services__form-cancel-btn" type="button">
+              Cancel
+            </button>
             <button
               className="services__form-submit-btn"
-              tpye="submit"
+              type="submit"
               disabled={isPending}
             >
               {isPending ? "Creating..." : "Create Service"}

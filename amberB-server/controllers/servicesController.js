@@ -2,25 +2,43 @@ const Service = require("../models/ServiceModel");
 
 async function createService(req, res, next) {
   try {
-    const { serviceTitle, subtitle, price, description } = req.body;
-    if (!serviceTitle || !price || !description) {
+    console.log("BODY:", req.body); // <-- should have text fields
+    console.log("FILE:", req.file);
+
+    const serviceTitle = req.body.serviceTitle?.trim();
+    const subtitle = req.body.subtitle?.trim();
+    const priceRaw = req.body.price;
+    const description = req.body.description?.trim();
+
+    if (!serviceTitle || priceRaw === undefined || !description) {
       return res.status(400).json({ message: "Missing required failed." });
+    }
+
+    const price = Number(priceRaw);
+    if (Number.isNaN(price) || price < 0) {
+      return res
+        .status(400)
+        .json({ message: "Number should be a non-negative number" });
     }
 
     const existingService = await Service.findOne({
       serviceTitle: { $regex: `^${serviceTitle}$`, $options: "i" },
     });
+
     if (existingService) {
       return res
         .status(409)
         .json({ message: "Service Title already created." });
     }
 
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+
     const createdService = await Service.create({
       serviceTitle,
       subtitle,
-      price: Number(price),
+      price,
       description,
+      imageUrl,
     });
     return res.status(201).json({
       message: "Service created",
@@ -29,26 +47,43 @@ async function createService(req, res, next) {
       subtitle: createdService.subtitle,
       price: createdService.price,
       description: createdService.description,
-      image: createdService.image,
+      imageUrl: createdService.imageUrl,
       createdAt: createdService.createdAt,
       updatedAt: createdService.updatedAt,
     });
   } catch (err) {
+    if (err && err.code === 11000) {
+      return res
+        .status(409)
+        .json({ message: "Serivce Title already existed." });
+    }
     next(err);
   }
 }
 
 async function getServices(req, res, next) {
-  const serviceId = req._service._id;
-  Service.findById(serviceId)
-    .then((service) => res.status(200).send(service))
-    .catch((err) => {
-      if (err.name === "CastError") {
-        err.statusCode = 400;
-      } else {
-        next(err);
-      }
-    });
+  try {
+    const service = await Service.find().sort({ createdAt: -1 }).lean();
+    return res.status(200).json({ service });
+  } catch (err) {
+    next(err);
+  }
 }
 
-module.exports = { createService, getServices };
+async function getServiceById(req, res, next) {
+  try {
+    const { id } = req.params;
+    const service = await Service.findById(id).lean();
+    if (!service) {
+      return res.status(400).json({ message: "Service not found" });
+    }
+    return res.status(200).json({ service });
+  } catch (err) {
+    if (err.name === "CastError") {
+      return res.status(400).json({ message: "Invalid service id" });
+    }
+    next(err);
+  }
+}
+
+module.exports = { createService, getServices, getServiceById };

@@ -147,6 +147,16 @@ function App() {
     return data;
   };
 
+  const handleGetService = async (id) => {
+    try {
+      if (!id) throw new Error("Service ID id required.");
+      const data = await auth.getServiceById(id);
+      return data;
+    } catch (err) {
+      console.error("Failed to fetch service:", err);
+    }
+  };
+
   return (
     <div className="page">
       <div className="page__content">
@@ -166,7 +176,10 @@ function App() {
             }
           ></Route>
           <Route path="/workshop" element={<Workshop />} />
-          <Route path="/bookonline" element={<BookOnline />} />
+          <Route
+            path="/bookonline"
+            element={<BookOnline getService={handleGetService} />}
+          />
           <Route
             path="/addservice"
             element={<AddServices submitService={handleCreateServiceSubmit} />}

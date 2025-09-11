@@ -17,9 +17,7 @@ function AboutCards() {
             className="about__card-img"
           />
           <h3 className="about__card-text">
-            Teacher: serving in education for 11 years, now as a Dean of
-            Students teaching kids w. Self Love, accountability, self awareness,
-            and leadership.
+            Teacher serving in education for 11 years, now as a Dean of Students
           </h3>
         </div>
 

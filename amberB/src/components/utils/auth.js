@@ -1,7 +1,7 @@
 const baseFromEnv = (
   import.meta.env.VITE_API_BASE || "http://localhost:4000"
 ).trim();
-const BASE = baseFromEnv.replace(/\/$/, "");
+export const BASE = baseFromEnv.replace(/\/$/, "");
 
 function normalizeError(res, data) {
   const msg = (data && (data.message || data.error)) || `HTTP ${res.status}`;
@@ -11,13 +11,25 @@ function normalizeError(res, data) {
   return err;
 }
 
-async function request(path, { headers = {}, ...opts } = {}) {
+// Generic request that smartly handles JSON vs FormData
+export async function request(path, opts = {}) {
+  const { headers = {}, body, ...rest } = opts;
+  const finalHeaders = { ...headers };
+
+  // 🔑 Only set JSON when NOT sending FormData
+  if (!(body instanceof FormData)) {
+    finalHeaders["Content-Type"] =
+      finalHeaders["Content-Type"] || "application/json";
+  } else {
+    delete finalHeaders["Content-Type"]; // browser sets multipart boundary
+  }
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json", ...headers },
-    ...opts,
+    ...rest,
+    headers: finalHeaders,
+    body,
   });
 
-  // response might not be JSON on errors, so guard it
   let data = null;
   try {
     data = await res.json();
@@ -27,8 +39,7 @@ async function request(path, { headers = {}, ...opts } = {}) {
   return data;
 }
 
-// ---- Sign in, sign up ----
-
+// ---- Auth helpers ----
 export async function signUp(payload) {
   const data = await request(`/auth/signup`, {
     method: "POST",
@@ -50,11 +61,11 @@ export async function signIn({ email, password }) {
 export function getToken() {
   return localStorage.getItem("token");
 }
-
 export function signOut() {
   localStorage.removeItem("token");
 }
 
+// Authenticated wrapper that still respects FormData
 export async function authRequest(path, options = {}) {
   const token = getToken();
   const headers = { ...(options.headers || {}) };
@@ -62,18 +73,28 @@ export async function authRequest(path, options = {}) {
   return request(path, { ...options, headers });
 }
 
-// ---- services ----
+// ---- Services ----
 
+// Create service with FormData (supports image upload)
+// Uses request() so it won't force JSON headers.
 export async function createService(formData) {
-  const res = await fetch(`/auth/services`, {
+  return request(`/services`, {
     method: "POST",
-    body: formData,
+    body: formData, // IMPORTANT: FormData, no Content-Type set manually
   });
+}
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.message || `Request failed with ${res.status}`);
-  }
+// Get one service by id
+export async function getServiceById(id) {
+  if (!id) throw new Error("Service id is required");
+  return request(`/services/${encodeURIComponent(id)}`, {
+    method: "GET",
+  });
+}
 
-  return res.json();
+// (Optional) Get list
+export async function getServices(params = {}) {
+  const qs = new URLSearchParams(params);
+  const q = qs.toString() ? `?${qs.toString()}` : "";
+  return request(`/services${q}`, { method: "GET" });
 }

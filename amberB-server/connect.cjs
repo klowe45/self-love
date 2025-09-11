@@ -1,9 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const multer = require("multer");
-const upload = require("");
 const cors = require("cors");
 require("dotenv").config({ path: "./config.env" });
+const path = require("path");
+const fs = require("fs");
 
 const app = express();
 const mainRouter = require("./routes/index");
@@ -63,10 +63,26 @@ function redact(uri) {
       console.warn("Mongo disconnected")
     );
 
+    //main router(index.js)
     app.use("/", mainRouter);
 
     app.use((_req, res) => res.status(404).json({ message: "Not Found" }));
+
+    //static files
+    const uploadsDir = path.join(process.cwd(), "uploads");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+    app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+    app.use(express.urlencoded({ extended: true }));
+    //Error handling
     app.use(errorHandler);
+    app.use((err, req, res, next) => {
+      console.error("❌ Unhandled error:", err);
+      res
+        .status(err.statusCode || 500)
+        .json({ message: err.message || "Server error" });
+    });
 
     app.listen(PORT, "0.0.0.0", () =>
       console.log(`🚀 Server on http://localhost:${PORT}`)

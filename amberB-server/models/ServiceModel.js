@@ -18,7 +18,7 @@ const serviceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
+    imageUrl: {
       url: { type: String },
       publicId: { type: String },
       width: Number,
