@@ -31,7 +31,14 @@ async function createService(req, res, next) {
         .json({ message: "Service Title already created." });
     }
 
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    const imageUrl = req.file 
+      ? {
+          url: `/uploads/${req.file.filename}`,
+          publicId: req.file.filename,
+          format: req.file.mimetype.split('/')[1],
+          size: req.file.size.toString(),
+        }
+      : null;
 
     const createdService = await Service.create({
       serviceTitle,

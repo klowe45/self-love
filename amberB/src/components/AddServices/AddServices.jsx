@@ -3,7 +3,7 @@ import "./AddServices.css";
 import defaultImage from "../../assets/flower_array/flower_array1.png";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useActionState } from "react";
-import { createService } from "../utils/auth";
+import { createService, getServices } from "../utils/auth";
 
 const INITIAL_STATE = {
   success: false,
@@ -36,9 +36,11 @@ function AddServices() {
   /* image states */
 
   const [imageSrc, setImageSrc] = useState(defaultImage);
+  const [selectedFile, setSelectedFile] = useState(null);
   const fileRef = useRef(null);
   const objectUrlRef = useRef(null);
 
+  //file image picker
   const openFilePicker = () => {
     fileRef.current?.click();
   };
@@ -51,6 +53,7 @@ function AddServices() {
     const url = URL.createObjectURL(file);
     objectUrlRef.current = url;
     setImageSrc(url);
+    setSelectedFile(file);
   };
 
   useEffect(() => {
@@ -67,6 +70,12 @@ function AddServices() {
       const subtitle = formData.get("subtitle");
       const price = formData.get("price");
       const description = formData.get("description");
+
+      // Ensure the selected file is added to FormData
+      if (selectedFile) {
+        formData.set("image", selectedFile);
+      }
+
       const imageFile = formData.get("image");
 
       if (!serviceTitle || !price || !description) {
@@ -88,6 +97,7 @@ function AddServices() {
             subtitle,
             price,
             description,
+            imageFile,
           },
         };
       } catch (err) {
@@ -95,7 +105,7 @@ function AddServices() {
           ...prevState,
           success: false,
           error: err.message || "Failed to create service.",
-          service: { serviceTitle, subtitle, price, description },
+          service: { serviceTitle, subtitle, price, description, imageFile },
         };
       }
     },
@@ -174,6 +184,7 @@ function AddServices() {
               />
             </div>
           </div>
+
           <input
             type="file"
             name="image"

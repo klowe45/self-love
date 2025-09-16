@@ -17,11 +17,13 @@ export async function request(path, opts = {}) {
   const finalHeaders = { ...headers };
 
   // 🔑 Only set JSON when NOT sending FormData
-  if (!(body instanceof FormData)) {
+  if (body instanceof FormData) {
+    // Let browser set multipart/form-data with boundary
+    delete finalHeaders["Content-Type"];
+  } else {
+    // Set JSON for regular requests
     finalHeaders["Content-Type"] =
       finalHeaders["Content-Type"] || "application/json";
-  } else {
-    delete finalHeaders["Content-Type"]; // browser sets multipart boundary
   }
 
   const res = await fetch(`${BASE}${path}`, {
@@ -75,12 +77,10 @@ export async function authRequest(path, options = {}) {
 
 // ---- Services ----
 
-// Create service with FormData (supports image upload)
-// Uses request() so it won't force JSON headers.
 export async function createService(formData) {
   return request(`/services`, {
     method: "POST",
-    body: formData, // IMPORTANT: FormData, no Content-Type set manually
+    body: formData,
   });
 }
 
@@ -92,9 +92,24 @@ export async function getServiceById(id) {
   });
 }
 
-// (Optional) Get list
+// Get all services from the database
 export async function getServices(params = {}) {
-  const qs = new URLSearchParams(params);
-  const q = qs.toString() ? `?${qs.toString()}` : "";
-  return request(`/services${q}`, { method: "GET" });
+  try {
+    const qs = new URLSearchParams(params);
+    const q = qs.toString() ? `?${qs.toString()}` : "";
+    
+    const response = await request(`/services${q}`, { method: "GET" });
+    
+    // Server returns { service: [...] } but we normalize it to { services: [...] }
+    const services = Array.isArray(response?.service) ? response.service : [];
+    
+    return {
+      services,
+      count: services.length,
+      success: true
+    };
+  } catch (error) {
+    console.error("getServices error:", error);
+    throw new Error(error.message || "Failed to fetch services");
+  }
 }

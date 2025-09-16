@@ -42,7 +42,6 @@
 }
 
 .header__cart {
-  margin: 0 10px 0 0;
   width: 35px;
   height: 35px;
   padding: 0;
@@ -52,8 +51,8 @@
 .header__cart-img {
   background-repeat: none;
   background-size: contain;
-  height: 20px;
-  width: 20px;
+  height: 35px;
+  width: 35px;
 }
 
 .header__logout {
