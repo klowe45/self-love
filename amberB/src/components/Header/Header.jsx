@@ -1,6 +1,7 @@
 import "./Header.css";
 import Navigation from "../Navigation/Navigation";
-import shoppingCart from "../../assets/icons/cart.svg";
+import shoppingCartIcon from "../../assets/icons/cart.svg";
+import ShoppingCartCount from "../ShoppingCartCount/ShoppingCartCount";
 
 function Header({
   openDropDownMenu,
@@ -31,9 +32,9 @@ function Header({
         ) : (
           <>
             <button className="header__cart">
-              <div className="header__cart-counter">{}</div>
+              <ShoppingCartCount />
               <img
-                src={shoppingCart}
+                src={shoppingCartIcon}
                 alt="shopping cart"
                 className="header__cart-img"
               />

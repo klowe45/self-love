@@ -46,6 +46,7 @@
   height: 35px;
   padding: 0;
   background-color: transparent;
+  position: relative;
 }
 
 .header__cart-img {
