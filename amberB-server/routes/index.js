@@ -1,14 +1,8 @@
 const router = require("express").Router();
+const usersRouter = require("../routes/User");
+const servicesRouter = require("../routes/Service");
 
-const { signIn, signUp } = require("../controllers/usersController");
-
-const usersRouter = require("../models/userModel");
-const servicesRouter = require("../models/ServiceModel");
-
-router.post("/auth/signin", signIn);
-router.post("/auth/signup", signUp);
-
-router.use("/users", usersRouter);
+router.use("/auth", usersRouter);
 router.use("/services", servicesRouter);
 
 module.exports = router;

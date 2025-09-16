@@ -15,6 +15,7 @@ import * as auth from "./components/utils/auth";
 import * as token from "./components/utils/Token";
 import AddServices from "./components/AddServices/AddServices";
 import LearnGrowLove from "./components/LearnGrowLove/LearnGrowLove";
+import { ServicesCreatedContext } from "./Context/ServicesCreatedContext";
 
 function App() {
   /*****************************************************************/
@@ -125,46 +126,133 @@ function App() {
     console.log("Log out success");
   };
 
+  /*****************************************************************/
+  /*                            Services                           */
+  /*****************************************************************/
+
+  const handleCreateServiceSubmit = async ({
+    serviceTitle,
+    subtitle,
+    price,
+    description,
+    image,
+  }) => {
+    const data = await auth.createService({
+      serviceTitle,
+      subtitle,
+      price,
+      description,
+      image,
+    });
+    console.log(data);
+    return data;
+  };
+
+  //get service by ID
+  const handleGetService = async (id) => {
+    try {
+      if (!id) throw new Error("Service ID id required.");
+      const data = await auth.getServiceById(id);
+      return data;
+    } catch (err) {
+      console.error("Failed to fetch service:", err);
+    }
+  };
+
+  //get all services
+  const [serviceData, setServiceData] = useState([]);
+  const [servicesLoading, setServicesLoading] = useState(false);
+  const [servicesError, setServicesError] = useState("");
+
+  useEffect(() => {
+    getAllServices();
+  }, []);
+
+  const getAllServices = async () => {
+    try {
+      setServicesLoading(true);
+      setServicesError("");
+
+      const response = await auth.getServices();
+
+      const services = Array.isArray(response)
+        ? response
+        : Array.isArray(response?.services)
+        ? response.services
+        : [];
+
+      setServiceData(services ?? []);
+    } catch (err) {
+      console.error("Failed to get all Services", err);
+      console.log("Error details:", {
+        message: err?.message,
+        status: err?.status,
+        data: err?.data,
+      });
+      setServicesError(err?.message || "Failed to get all services");
+      setServiceData([]);
+    } finally {
+      setServicesLoading(false);
+    }
+  };
+
   return (
     <div className="page">
-      <div className="page__content">
-        <Header
+      <ServicesCreatedContext.Provider
+        value={{
+          serviceData,
+          servicesLoading,
+          servicesError,
+          getAllServices,
+        }}
+      >
+        <div className="page__content">
+          <Header
+            activeModal={activeModal}
+            handleSignInModal={handleSignInModal}
+            isLoggedIn={isLoggedIn}
+            handleLogout={handleLogout}
+          />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <Main />
+                </>
+              }
+            ></Route>
+            <Route path="/workshop" element={<Workshop />} />
+            <Route
+              path="/bookonline"
+              element={<BookOnline serviceData={serviceData} />}
+            />
+            <Route
+              path="/addservice"
+              element={
+                <AddServices submitService={handleCreateServiceSubmit} />
+              }
+            />
+            <Route path="*" element={<h1>Page Not Found</h1>} />
+          </Routes>
+          <Mission />
+          <Contact />
+          <LearnGrowLove />
+          <Footer />
+        </div>
+        <SignUpModal
+          closeModal={closeModal}
           activeModal={activeModal}
           handleSignInModal={handleSignInModal}
-          isLoggedIn={isLoggedIn}
-          handleLogout={handleLogout}
+          handleSignUpSubmit={handleSignUpSubmit}
         />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Main />
-              </>
-            }
-          ></Route>
-          <Route path="/workshop" element={<Workshop />} />
-          <Route path="/bookonline" element={<BookOnline />} />
-          <Route path="/addservice" element={<AddServices />} />
-          <Route path="*" element={<h1>Page Not Found</h1>} />
-        </Routes>
-        <Mission />
-        <Contact />
-        <LearnGrowLove />
-        <Footer />
-      </div>
-      <SignUpModal
-        closeModal={closeModal}
-        activeModal={activeModal}
-        handleSignInModal={handleSignInModal}
-        handleSignUpSubmit={handleSignUpSubmit}
-      />
-      <SignInModal
-        closeModal={closeModal}
-        activeModal={activeModal}
-        handleSignUpModal={handleSignUpModal}
-        handleSignInSubmit={handleSignInSubmit}
-      />
+        <SignInModal
+          closeModal={closeModal}
+          activeModal={activeModal}
+          handleSignUpModal={handleSignUpModal}
+          handleSignInSubmit={handleSignInSubmit}
+        />
+      </ServicesCreatedContext.Provider>
     </div>
   );
 }

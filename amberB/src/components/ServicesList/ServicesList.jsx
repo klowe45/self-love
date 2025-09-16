@@ -1,17 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./ServicesList.css";
 import ServiceCard from "../ServiceCard/ServiceCard";
+import { ServicesCreatedContext } from "../../Context/ServicesCreatedContext";
 
-function ServiceList() {
+function ServicesList() {
+  const { serviceData } = useContext(ServicesCreatedContext);
   return (
     <div className="services__list">
       <ul className="services__list-container">
-        <li className="serivces__list-card">
-          <ServiceCard />
-        </li>
+        {serviceData?.map((service) => (
+          <li key={service._id || service.id} className="services__list-card">
+            <ServiceCard service={service} />
+          </li>
+        ))}
       </ul>
     </div>
   );
 }
 
-export default ServiceList;
+export default ServicesList;

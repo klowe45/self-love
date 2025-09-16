@@ -1,16 +1,20 @@
 import "./ServiceCard.css";
+import defaultFlower from "../../assets/flower_array/flower_array1.png";
+import { BASE } from "../utils/auth";
 
-const DEFAULT_STATE = {
-  serviceTitle: "Title",
-  subtitle: "Subtitle (Optional)",
-  price: "$00",
-  description: "Description will go here..",
-};
+function ServiceCard({ service }) {
+  const serviceTitle = service?.serviceTitle || "Title";
+  const subtitle = service?.subtitle || "Subtitle (Optional)";
+  const price = service?.price || "00";
+  const description = service?.description || "Description will go here..";
+  const imageUrl = service?.imageUrl.url || defaultFlower;
 
-function ServiceCard({ service, imageSrc }) {
-  const { serviceTitle, subtitle, price, description } = {
-    ...service,
-  };
+  const raw = service?.imageUrl.url;
+  const imageSrc = raw
+    ? raw.startsWith("http")
+      ? raw
+      : `${BASE}${raw}`
+    : defaultFlower;
 
   return (
     <div className="service__card">
@@ -22,7 +26,7 @@ function ServiceCard({ service, imageSrc }) {
         <p className="service__card-subtitle">{subtitle}</p>
         <p className="service__card-description">{description}</p>
         <div className="service__card-price-booknow-container">
-          <p className="service__card-price">{`$${price}`}</p>
+          <p className="service__card-price">${price}</p>
           <button className="service__card-booknow">Book Now</button>
         </div>
       </div>

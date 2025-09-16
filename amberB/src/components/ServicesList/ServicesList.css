@@ -5,4 +5,12 @@
 .services__list-container {
   list-style-type: none;
   display: flex;
+  gap: 20px 10px;
+  flex-wrap: wrap;
+}
+
+.services__list-card {
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto 0 0;
 }
