@@ -7,10 +7,8 @@ function ShoppingCartCount() {
   const [serviceCount, setServiceCount] = useState(0);
 
   useEffect(() => {
-    // Check the number of objects in the serviceData array
     const count = Array.isArray(serviceData) ? serviceData.length : 0;
     setServiceCount(count);
-    console.log("Service count updated:", count);
   }, [serviceData]);
 
   return (
@@ -21,3 +19,5 @@ function ShoppingCartCount() {
 }
 
 export default ShoppingCartCount;
+
+//add function to filter out the available sessions

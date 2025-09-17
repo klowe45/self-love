@@ -4,13 +4,16 @@
 
 .services__list-container {
   list-style-type: none;
-  display: flex;
-  gap: 20px 10px;
+  display: grid;
+  gap: 20px 100px;
   flex-wrap: wrap;
+  grid-template: auto;
+
+  grid-template-columns: 500px 500px;
+  justify-content: center;
 }
 
 .services__list-card {
   display: flex;
   max-width: 500px;
-  margin: 0 auto 0 0;
 }

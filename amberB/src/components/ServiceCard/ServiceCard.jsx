@@ -7,9 +7,9 @@ function ServiceCard({ service }) {
   const subtitle = service?.subtitle || "Subtitle (Optional)";
   const price = service?.price || "00";
   const description = service?.description || "Description will go here..";
-  const imageUrl = service?.imageUrl.url || defaultFlower;
+  const imageUrl = service?.imageUrl?.url || defaultFlower;
 
-  const raw = service?.imageUrl.url;
+  const raw = service?.imageUrl?.url;
   const imageSrc = raw
     ? raw.startsWith("http")
       ? raw

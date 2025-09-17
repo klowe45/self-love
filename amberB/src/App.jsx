@@ -54,6 +54,7 @@ function App() {
   };
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isAdmit, setIsAdmin] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(!!auth.getToken());
@@ -163,6 +164,7 @@ function App() {
   const [serviceData, setServiceData] = useState([]);
   const [servicesLoading, setServicesLoading] = useState(false);
   const [servicesError, setServicesError] = useState("");
+  const [bookedServices, setBookedServices] = useState([]);
 
   useEffect(() => {
     getAllServices();
@@ -204,6 +206,7 @@ function App() {
           servicesLoading,
           servicesError,
           getAllServices,
+          bookedServices,
         }}
       >
         <div className="page__content">
