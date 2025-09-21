@@ -27,6 +27,8 @@ function ServiceCard({ service, deleteCardModal, editCardModal }) {
 
   //edit modal
 
+  const id = service?._id || serivce?.id;
+
   const handleEditClick = () => {
     editCardModal();
   };

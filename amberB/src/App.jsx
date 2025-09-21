@@ -217,6 +217,7 @@ function App() {
   const [updateServiceLoading, setUpdateServiceLoading] = useState(false);
   const [updatedService, setUpdatedService] = useState({});
   const [updateServiceError, setUpdateServiceError] = useState("");
+  const [currentServiceCard, setCurrentServiceCard] = useState();
 
   const updateServiceCardSubmit = async (serviceId, formData) => {
     try {
@@ -226,10 +227,10 @@ function App() {
       const response = await auth.updateServiceCard(serviceId, formData);
       console.log(response);
       setUpdatedService(response.service || {});
-      
+
       // Refresh the services list to show updated data
       await getAllServices();
-      
+
       return response;
     } catch (err) {
       console.error("Failed to update service", err);
