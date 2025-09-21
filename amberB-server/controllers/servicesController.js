@@ -93,4 +93,75 @@ async function getServiceById(req, res, next) {
   }
 }
 
-module.exports = { createService, getServices, getServiceById };
+async function updateService(req, res, next) {
+  try {
+    console.log("UPDATE BODY:", req.body);
+    console.log("UPDATE FILE:", req.file);
+
+    const { id } = req.params;
+    const serviceTitle = req.body.serviceTitle?.trim();
+    const subtitle = req.body.subtitle?.trim();
+    const priceRaw = req.body.price;
+    const description = req.body.description?.trim();
+
+    if (!serviceTitle || priceRaw === undefined || !description) {
+      return res.status(400).json({ message: "Missing required fields." });
+    }
+
+    const price = Number(priceRaw);
+    if (Number.isNaN(price) || price < 0) {
+      return res
+        .status(400)
+        .json({ message: "Price should be a non-negative number" });
+    }
+
+    // Check if service exists
+    const existingService = await Service.findById(id);
+    if (!existingService) {
+      return res.status(404).json({ message: "Service not found" });
+    }
+
+    // Prepare update object
+    const updateData = {
+      serviceTitle,
+      subtitle,
+      price,
+      description,
+    };
+
+    // Handle image update if new file is uploaded
+    if (req.file) {
+      updateData.imageUrl = {
+        url: `/uploads/${req.file.filename}`,
+        publicId: req.file.filename,
+        format: req.file.mimetype.split('/')[1],
+        size: req.file.size.toString(),
+      };
+    }
+
+    const updatedService = await Service.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      message: "Service updated successfully",
+      _id: updatedService._id,
+      serviceTitle: updatedService.serviceTitle,
+      subtitle: updatedService.subtitle,
+      price: updatedService.price,
+      description: updatedService.description,
+      imageUrl: updatedService.imageUrl,
+      createdAt: updatedService.createdAt,
+      updatedAt: updatedService.updatedAt,
+    });
+  } catch (err) {
+    if (err.name === "CastError") {
+      return res.status(400).json({ message: "Invalid service ID" });
+    }
+    next(err);
+  }
+}
+
+module.exports = { createService, getServices, getServiceById, updateService };

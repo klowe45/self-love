@@ -97,19 +97,45 @@ export async function getServices(params = {}) {
   try {
     const qs = new URLSearchParams(params);
     const q = qs.toString() ? `?${qs.toString()}` : "";
-    
+
     const response = await request(`/services${q}`, { method: "GET" });
-    
+
     // Server returns { service: [...] } but we normalize it to { services: [...] }
     const services = Array.isArray(response?.service) ? response.service : [];
-    
+
     return {
       services,
       count: services.length,
-      success: true
+      success: true,
     };
-  } catch (error) {
-    console.error("getServices error:", error);
-    throw new Error(error.message || "Failed to fetch services");
+  } catch (err) {
+    console.error("getServices error:", err);
+    throw new Error(err.message || "Failed to fetch services");
+  }
+}
+
+// Update service card with new data
+export async function updateServiceCard(serviceId, formData) {
+  try {
+    if (!serviceId) {
+      throw new Error("Service ID is required for updating");
+    }
+
+    const response = await request(
+      `/services/${encodeURIComponent(serviceId)}`,
+      {
+        method: "PUT",
+        body: formData,
+      }
+    );
+
+    return {
+      success: true,
+      service: response,
+      message: "Service updated successfully",
+    };
+  } catch (err) {
+    console.error("updateServiceCard error:", err);
+    throw new Error(err.message || "Failed to update service");
   }
 }

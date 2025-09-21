@@ -11,6 +11,7 @@ function ModalWithForm({
   toggleButton,
   formAction,
   isPending,
+  buttonText2Hidden,
 }) {
   return (
     <div className={`modal ${isOpen ? "modal_opened" : ""}`}>
@@ -30,6 +31,7 @@ function ModalWithForm({
             type="button"
             className="modal__submit"
             onClick={toggleButton}
+            hidden={buttonText2Hidden}
           >
             {buttonText2}
           </button>

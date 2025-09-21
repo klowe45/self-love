@@ -1,6 +1,6 @@
 import "./Contact.css";
 import React from "react";
-import phoneImg from "../../assets/phone-icon.png";
+import phoneImg from "../../assets/icons/phone-icon.png";
 
 function Contact() {
   const handleInstagramClick = () => {

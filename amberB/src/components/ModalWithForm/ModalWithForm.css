@@ -22,8 +22,9 @@
   position: relative;
   background-color: #ffffff;
   width: 400px;
-  padding: 10px;
+  padding: 20px;
   border-radius: 40px;
+  box-sizing: border-box;
 }
 
 .modal__close {
@@ -64,22 +65,30 @@
 }
 
 .modal__label {
-  margin: 20px;
+  margin: 15px 0;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .modal__input {
-  margin: 0 0 0 auto;
   background-color: transparent;
   border: 0;
-  border-bottom: 1px solid;
-  width: 200px;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  padding: 8px 0;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.modal__input:focus {
+  outline: none;
+  border-bottom-color: #15b99d;
 }
 
 .modal__submit {
-  width: 100px;
-  height: 30px;
+  min-width: 100px;
+  max-width: 150px;
   background-color: transparent;
   border: 1px solid #15b99d;
   padding: 5px;

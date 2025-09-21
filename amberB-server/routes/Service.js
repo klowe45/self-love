@@ -5,6 +5,7 @@ const {
   getServices,
   createService,
   getServiceById,
+  updateService,
 } = require("../controllers/servicesController");
 
 //get request
@@ -13,5 +14,8 @@ router.get("/:id", getServiceById);
 
 //post request
 router.post("/", upload.single("image"), createService);
+
+//put request (update)
+router.put("/:id", upload.single("image"), updateService);
 
 module.exports = router;

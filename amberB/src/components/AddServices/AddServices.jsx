@@ -23,6 +23,7 @@ const DEFAULT_STATE = {
 };
 
 function AddServices() {
+  //Navigation
   const navigate = useNavigate();
 
   const handleReturn = () => {
@@ -31,6 +32,10 @@ function AddServices() {
     } else {
       navigate("/");
     }
+  };
+
+  const goToFilteredServices = () => {
+    navigate("/filteredServices");
   };
 
   /* image states */
@@ -117,15 +122,25 @@ function AddServices() {
   return (
     <section className="services">
       <div className="services__header">
-        <div className="services__header-return-title">
-          <button className="services__return-btn" onClick={handleReturn}>
-            Return
-          </button>
-          <h1 className="services__title">Add New Service</h1>
+        <button className="services__header-return-btn" onClick={handleReturn}>
+          {"< Return"}
+        </button>
+
+        <div className="services__header-info">
+          <div className="services__header-title-btn">
+            <h1 className="services__header-title">Add New Service</h1>
+            <button
+              className="services__header-filter-btn"
+              type="button"
+              onClick={goToFilteredServices}
+            >
+              {"Handle Services >"}
+            </button>
+          </div>
+          <p className="services__header-description">
+            Create a new self-love empowerment session
+          </p>
         </div>
-        <p className="services__description">
-          Create a new self-love empowerment session
-        </p>
       </div>
       <div className="services__container">
         <form

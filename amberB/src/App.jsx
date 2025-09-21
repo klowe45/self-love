@@ -1,22 +1,29 @@
 import "./App.css";
+//react imports
 import { Route, Routes } from "react-router-dom";
+//imported sections
 import Header from "./components/Header/Header";
 import Main from "./components/Main/Main";
-import Footer from "./components/Footer/Footer";
-import Workshop from "./components/Workshop/Workshop";
-import { useState, useEffect } from "react";
-import Contact from "./components/Contact/Contact";
 import BookOnline from "./components/BookOnline/BookOnline";
-import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 import Mission from "./components/Mission/Mission";
-import SignUpModal from "./components/SignUpModal/SignUpModal";
-import SignInModal from "./components/SignInModal/SignInModal";
+import Contact from "./components/Contact/Contact";
+import LearnGrowLove from "./components/LearnGrowLove/LearnGrowLove";
+import Footer from "./components/Footer/Footer";
+import AddServices from "./components/AddServices/AddServices";
+import Workshop from "./components/Workshop/Workshop";
+import FilterServices from "./components/FilterServices/FilterServices";
+import { useState, useEffect } from "react";
+//auth
 import * as auth from "./components/utils/auth";
 import * as token from "./components/utils/Token";
-import AddServices from "./components/AddServices/AddServices";
-import LearnGrowLove from "./components/LearnGrowLove/LearnGrowLove";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+//context
 import { ServicesCreatedContext } from "./Context/ServicesCreatedContext";
-
+//imported modals
+import DeleteCardModal from "./components/DeleteCardModal/DeleteCardModal";
+import SignUpModal from "./components/SignUpModal/SignUpModal";
+import SignInModal from "./components/SignInModal/SignInModal";
+import EditServiceCardModal from "./components/EditServiceCardModal/EditServiceCardModal";
 function App() {
   /*****************************************************************/
   /*                             Modal                             */
@@ -35,6 +42,14 @@ function App() {
 
   const handleSignInModal = () => {
     setActiveModal("signin");
+  };
+
+  const handleDeleteCardModal = () => {
+    setActiveModal("deleteCard");
+  };
+
+  const handleEditCardModal = () => {
+    setActiveModal("editServiceCard");
   };
 
   /*****************************************************************/
@@ -198,6 +213,38 @@ function App() {
     }
   };
 
+  //edit service cards
+  const [updateServiceLoading, setUpdateServiceLoading] = useState(false);
+  const [updatedService, setUpdatedService] = useState({});
+  const [updateServiceError, setUpdateServiceError] = useState("");
+
+  const updateServiceCardSubmit = async (serviceId, formData) => {
+    try {
+      setUpdateServiceLoading(true);
+      setUpdateServiceError("");
+
+      const response = await auth.updateServiceCard(serviceId, formData);
+      console.log(response);
+      setUpdatedService(response.service || {});
+      
+      // Refresh the services list to show updated data
+      await getAllServices();
+      
+      return response;
+    } catch (err) {
+      console.error("Failed to update service", err);
+      console.log("Error details", {
+        message: err?.message,
+        status: err?.status,
+        data: err?.data,
+      });
+      setUpdateServiceError(err?.message || "Failed to update service");
+      throw err;
+    } finally {
+      setUpdateServiceLoading(false);
+    }
+  };
+
   return (
     <div className="page">
       <ServicesCreatedContext.Provider
@@ -236,6 +283,15 @@ function App() {
                 <AddServices submitService={handleCreateServiceSubmit} />
               }
             />
+            <Route
+              path="/filteredServices"
+              element={
+                <FilterServices
+                  deleteCardModal={handleDeleteCardModal}
+                  editCardModal={handleEditCardModal}
+                />
+              }
+            />
             <Route path="*" element={<h1>Page Not Found</h1>} />
           </Routes>
           <Mission />
@@ -254,6 +310,12 @@ function App() {
           activeModal={activeModal}
           handleSignUpModal={handleSignUpModal}
           handleSignInSubmit={handleSignInSubmit}
+        />
+        <DeleteCardModal closeModal={closeModal} activeModal={activeModal} />
+        <EditServiceCardModal
+          closeModal={closeModal}
+          activeModal={activeModal}
+          updateServiceCardSubmit={updateServiceCardSubmit}
         />
       </ServicesCreatedContext.Provider>
     </div>

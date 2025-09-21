@@ -8,6 +8,51 @@
   max-width: 500px;
   max-height: 500px;
   margin: 0;
+  position: relative;
+}
+
+.service__card-edit {
+  max-width: 1px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: transparent;
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.service__card-edit:hover {
+  color: rgb(33, 32, 32);
+  font-size: 20px;
+}
+
+.service__card-delete {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  background-image: url("../../assets//icons/trash-icon.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.service__card-delete:hover {
+  background-color: transparent;
+  transform: scale(1.2);
+  opacity: 1;
+  filter: brightness(1.2) contrast(1.1);
 }
 
 .service__card-img-container {
@@ -22,12 +67,6 @@
   width: 100px;
   height: 100px;
   margin: 50px 0 50px 0;
-}
-
-.service__card-block {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
 }
 
 .service__card-title {
@@ -68,4 +107,8 @@
   border: 1px solid #575555b7;
   border-radius: 10px;
   margin: 0 20px 20px 0;
+}
+
+.service__card-booknow:hover {
+  background-color: rgba(255, 192, 203, 0.241);
 }
